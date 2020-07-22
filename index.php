@@ -1,4 +1,4 @@
-﻿<?php include_once "base.php";?>
+﻿<?php include_once "base.php"; ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0039) -->
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -10,6 +10,8 @@
 	<link href="./plugin/css.css" rel="stylesheet" type="text/css">
 	<script src="./plugin/jquery-1.9.1.min.js"></script>
 	<script src="./plugin/js.js"></script>
+	<script src="SpryAssets/SpryTabbedPanels.js" type="text/javascript"></script>
+	<link href="SpryAssets/SpryTabbedPanels.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -18,7 +20,7 @@
 	</div>
 	<div id="all">
 		<div id="title">
-			<?= date("m 月 d 日 l"); ?> | 今日瀏覽: <?=$_SESSION['visited'];?> | 累積瀏覽: <?=$Visited->q("SELECT SUM(`total`) FROM `visited` ")[0][0] ;?> <span style="float:right"><a href="index.php">回首頁</a></span></div>
+			<?= date("m 月 d 日 l"); ?> | 今日瀏覽: <?= $_SESSION['visited']; ?> | 累積瀏覽: <?= $Visited->q("SELECT SUM(`total`) FROM `visited` ")[0][0]; ?> <span style="float:right"><a href="index.php">回首頁</a></span></div>
 		<div id="title2">
 			<img src="img/02B01.jpg" title="健康促進網 - 回首頁" onclick="location.href='index.php'">
 		</div>
@@ -36,14 +38,27 @@
 						<marquee>請民眾踴躍投稿電子報，讓電子報成為大家相交流、分享的園地！詳見最新文章。</marquee>
 					</span>
 					<span style="width:18%; display:inline-block;">
-						<a href="?do=login">會員登入</a>
+						<?php
+						if (!empty($_SESSION['login'])) {
+							echo "歡迎" . $_SESSION['login'];
+							if ($_SESSION['login'] == 'admin') {
+								echo "<div><button><a href='admin.php'>管理</a></button>";
+								echo "|<button><a href='api/logout.php'>登出</a></button></div>";
+							} else {
+								echo "<button><a href='api/logout.php'>登出</a></button>";
+							}
+						} else {
+							echo "<a href='?do=login'>會員登入</a>";
+						}
+						?>
+
 					</span>
 					<div class="">
-<?php
-$do=$_GET['do']??"main";
-$file="front/".$do.".php";
-include file_exists(($file))?$file:"front/main.php";
-?>
+						<?php
+						$do = $_GET['do'] ?? "main";
+						$file = "front/" . $do . ".php";
+						include file_exists(($file)) ? $file : "front/main.php";
+						?>
 					</div>
 				</div>
 			</div>
